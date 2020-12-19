@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import markdown2
 
 from . import util
@@ -16,3 +16,25 @@ def article(request, name):
         })
     else:
         return render(request, "encyclopedia/error.html")
+
+def search(request):
+    original_query = (request.GET['q'])
+    query = original_query
+    entries = util.list_entries()
+    results = []
+    for entry in entries:
+        entry.lower()
+        if query in entry:
+            results.append(entry)
+    
+    if query in entries:
+        return redirect('article', name=query)
+    elif results:
+        return render(request, "encyclopedia/search.html", {
+                "entries": results
+            })
+    else:
+        return render(request, "encyclopedia/error.html")
+
+def create(request):
+    return render(request, "encyclopedia/create.html")
