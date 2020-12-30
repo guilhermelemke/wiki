@@ -1,0 +1,1 @@
+return render(request, "encyclopedia/error.html")
